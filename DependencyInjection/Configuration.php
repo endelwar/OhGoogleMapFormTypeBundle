@@ -18,16 +18,20 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        
-        $rootNode = $treeBuilder->root('oh_google_map_form_type');
+        $treeBuilder = new TreeBuilder('oh_google_map_form_type');
+        if (\method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root('oh_google_map_form_type');
+        }
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
         $rootNode
             ->children()
-            ->scalarNode('api_key')
+                ->scalarNode('api_key')
             ->end()
             ->end();
 
